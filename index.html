@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio</title>
+    <style>
+
+        body{
+            margin: 0;
+            height: 100vh;
+        }
+
+        main {
+            background-color: #cd8200;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .navigation {
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 100vw;
+            height: -webkit-fill-available;
+            padding-bottom: 15px;
+            gap: 20px;
+        }
+
+        .button {
+            background-color: #cd8200;
+            border-radius: 100%;
+            color: white;
+            border: 5px solid #ffffff;
+            padding: 15px 15px;
+            cursor: pointer;
+            margin: 0 0px;
+            opacity: 0.7;
+        }
+
+        #pdf-viewer {
+            display: flex;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 500px;
+        }
+
+    </style>
+    <script src="https://kit.fontawesome.com/e5c3a4efef.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <main>
+        <canvas id="pdf-viewer"></canvas>
+        <div class="navigation">
+            <button id="prev" class="button"><i class="fa-solid fa-arrow-left"></i></button>
+            <button id="next" class="button"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </main>
+    <script src="https://unpkg.com/pdfjs-dist@3.9.179/build/pdf.min.js"></script>
+
+    <script>
+        // Definir o caminho para o worker do PDF.js a partir da CDN
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.9.179/build/pdf.worker.min.js';
+
+        // Caminho para o arquivo PDF
+        const url = 'assets/cardapio.pdf'; // Certifique-se de que o PDF está no local correto
+
+        let pdfDoc = null;
+        let currentPage = 1;
+
+        // Carregar o PDF usando o PDF.js
+        const loadingTask = pdfjsLib.getDocument(url);
+        loadingTask.promise.then(function(pdf) {
+            pdfDoc = pdf;
+            console.log('PDF carregado');
+            renderPage(currentPage);
+        }, function (reason) {
+            console.error('Erro ao carregar o PDF: ', reason);
+        });
+
+        function renderPage(num) {
+            pdfDoc.getPage(num).then(function(page) {
+                console.log('Página ' + num + ' carregada');
+
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale: scale });
+
+                const canvas = document.getElementById('pdf-viewer');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Renderizar a página no canvas
+                const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                page.render(renderContext);
+            });
+        }
+
+        document.getElementById('next').addEventListener('click', function() {
+            if (pdfDoc && currentPage < pdfDoc.numPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        });
+
+        document.getElementById('prev').addEventListener('click', function() {
+            if (pdfDoc && currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        });
+    </script>
+</body>
+</html>
