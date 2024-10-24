@@ -15,8 +15,8 @@ const loadingTask = pdfjsLib.getDocument(url);
 loadingTask.promise.then(function(pdf) {
     pdfDoc = pdf;
     console.log('PDF carregado');
+    renderPage(currentPage);
     setTimeout(function() {
-        renderPage(currentPage);
         loadingIndicator.style.display = 'none';
         Localcanvas.style.display = 'flex';
         nav.style.display = 'flex';
