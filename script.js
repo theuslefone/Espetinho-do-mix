@@ -1,13 +1,9 @@
-// Definir o caminho para o worker do PDF.js a partir da CDN
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.9.179/build/pdf.worker.min.js';
-
-// Caminho para o arquivo PDF
 const url = 'assets/cardapio.pdf'; // Certifique-se de que o PDF está no local correto
 
 let pdfDoc = null;
 let currentPage = 1;
 
-// Carregar o PDF usando o PDF.js
 const loadingTask = pdfjsLib.getDocument(url);
 loadingTask.promise.then(function(pdf) {
     pdfDoc = pdf;
