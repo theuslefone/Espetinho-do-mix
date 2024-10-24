@@ -3,6 +3,11 @@ body{
     height: 100vh;
 }
 
+a{
+    text-decoration: none;
+    color: white;
+}
+
 main {
     background-color: #cd8200;
     text-align: center;
