@@ -9,7 +9,7 @@ a{
 }
 
 main {
-    background-color: #cd8200;
+    background-color: white;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -43,6 +43,7 @@ main {
     display: flex;
     margin: 0 auto;
     width: 100%;
+    display: none;
     max-width: 500px;
 }
 
@@ -60,4 +61,16 @@ main {
     font-size: 32px;
     color: white;
     background-color: #4B8C2A;
+}
+
+#loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#loading img {
+    max-width: 300px;
 }

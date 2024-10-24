@@ -1,5 +1,12 @@
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.9.179/build/pdf.worker.min.js';
 const url = 'assets/cardapio.pdf'; // Certifique-se de que o PDF está no local correto
+const loadingIndicator = document.getElementById('loading');
+const Localcanvas = document.getElementById('pdf-viewer');
+const nav = document.getElementsByClassName('navigation')[0]; // Acesse o primeiro elemento da coleção
+const zap = document.getElementById('zapzap');
+
+nav.style.display = 'none';
+zap.style.display = 'none';
 
 let pdfDoc = null;
 let currentPage = 1;
@@ -8,7 +15,14 @@ const loadingTask = pdfjsLib.getDocument(url);
 loadingTask.promise.then(function(pdf) {
     pdfDoc = pdf;
     console.log('PDF carregado');
-    renderPage(currentPage);
+    setTimeout(function() {
+        renderPage(currentPage);
+        loadingIndicator.style.display = 'none';
+        Localcanvas.style.display = 'flex';
+        nav.style.display = 'flex';
+        zap.style.display = 'flex';
+        document.querySelector('main').style.backgroundColor = '#CD8200'; // Altera a cor de fundo
+    }, 3000); // 2000 milissegundos = 2 segundos
 }, function (reason) {
     console.error('Erro ao carregar o PDF: ', reason);
 });
